@@ -38,11 +38,11 @@ def reinforce(env, policy, optimizer, n_episodes=1000, max_t=1000, gamma=1.0, pr
     for i_episode in range(1, n_episodes + 1):
         saved_log_probs = []
         rewards = []
-        state = env.reset()
+        state, _ = env.reset()
         for t in range(max_t):
             action, log_prob = policy.act(state)
             saved_log_probs.append(log_prob)
-            state, reward, done, _ = env.step(action)
+            state, reward, done, _, _ = env.step(action)
             rewards.append(reward)
             if done:
                 break
@@ -68,7 +68,7 @@ def reinforce(env, policy, optimizer, n_episodes=1000, max_t=1000, gamma=1.0, pr
 
 if __name__ == '__main__':
     env = gym.make('Acrobot-v1')
-    env.seed(0)
+    # env.seed(0)
     print('observation space:', env.observation_space)
     print('action space:', env.action_space)
 
