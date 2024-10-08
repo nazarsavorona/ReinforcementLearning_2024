@@ -8,14 +8,14 @@ torch.manual_seed(0) # set random seed
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-state_dict = torch.load('checkpoint_best.pth')
+state_dict = torch.load('checkpoint.pth', weights_only=True)
 
 policy = Policy()
 policy.load_state_dict(state_dict)
 policy = policy.to(device)
 
 def show_smart_agent():
-    env = gym.make('Acrobot-v1')
+    env = gym.make('Acrobot-v1', render_mode='rgb_array')
     recorder = VideoRecorder(env, path='./video.mp4', enabled=True)
     state, _ = env.reset()
 

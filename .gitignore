@@ -1,3 +1,5 @@
 /.idea/
 /gymnasium/checkpoint.pth
 /test.ipynb
+/gymnasium/video.meta.json
+/gymnasium/video.mp4
