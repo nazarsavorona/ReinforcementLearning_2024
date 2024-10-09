@@ -90,7 +90,7 @@ def extract_policy(env, value_table):
 
 def test(env, optimal_policy, render=True):
 
-    state = env.reset()
+    state, _ = env.reset()
     if render:
         env.render()
 
@@ -98,7 +98,7 @@ def test(env, optimal_policy, render=True):
     total_reward = 0
     for _ in range(1000):
         action = int(optimal_policy[state])
-        state, reward, done, info = env.step(action)
+        state, reward, done, info, _ = env.step(action)
 
         if render:
             env.render()
@@ -112,8 +112,8 @@ def test(env, optimal_policy, render=True):
 
 if __name__ == '__main__':
 
-    env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=True)
-    env.seed(42)
+    env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=True, render_mode='rgb_array')
+    # env.seed(42)
 
     # show_random_agent(env)
     # env.P[1][1][2] = (1 / 3, 2, 1.0, False)
