@@ -30,3 +30,13 @@
 2. Порівняти результати з Policy Iteration та Value Iteration
 
 * monte_carlo_method_black_jack.py
+
+## Пара 4
+
+### ДЗ
+
+1. Адаптувати SARSAMethod для сценарію FrozenLake-v1 is_slippery=True
+2. Адалтувати QLearning для сценарію FrozenLake-v1 is_slippery=True
+
+* sarsa_frozen_lake.py
+* q_learning_frozen_lake.py
