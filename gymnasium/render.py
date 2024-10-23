@@ -19,6 +19,8 @@ def show_smart_agent():
     recorder = VideoRecorder(env, path='./video.mp4', enabled=True)
     state = env.reset()
 
+    score = 0
+
     for t in range(1000):
         recorder.capture_frame()
         action, _ = policy.act(state)
@@ -27,9 +29,12 @@ def show_smart_agent():
         print(action)
         env.render()
         state, reward, done, _ = env.step(action)
+        score += reward
+
         if done:
             break
         time.sleep(0.05)
+    print(f'Score: {score}')
 
     env.close()
 

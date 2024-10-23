@@ -40,3 +40,9 @@
 
 * sarsa_frozen_lake.py
 * q_learning_frozen_lake.py
+
+## Пара 5 - для ШІ обов'язково
+
+1. Адаптувати deep_q_learning для сценарію Bipedal Walker
+
+* deep_q_learning.py
