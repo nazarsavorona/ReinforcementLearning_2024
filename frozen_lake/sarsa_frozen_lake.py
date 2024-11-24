@@ -24,6 +24,7 @@ def generate_policy(Q):
 
 def sarsa(env, num_episodes, num_timesteps, alpha, gamma, epsilon):
     Q = defaultdict(float)
+    epsilon_decay = 0.995  # Slowly reduce epsilon
 
     for i in range(num_episodes):
         state, _ = env.reset()
@@ -40,7 +41,9 @@ def sarsa(env, num_episodes, num_timesteps, alpha, gamma, epsilon):
 
             if done:
                 break
-        # show_Q(env, Q)
+
+        # Reduce epsilon after each episode
+        epsilon = max(epsilon * epsilon_decay, 0.1)
 
     return Q
 
@@ -95,15 +98,15 @@ def show_Q(env, Q):
 
 
 if __name__ == '__main__':
-    env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=False)
+    env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=True)
     # env.seed(42)
 
-    alpha = 0.1
-    gamma = 0.9
-    epsilon = 0.9
+    alpha = 0.01
+    gamma = 0.95
+    epsilon = 0.7
 
-    num_episodes = 5000
-    num_timesteps = 1000
+    num_episodes = 500000
+    num_timesteps = 5000
 
     Q = sarsa(env, num_episodes, num_timesteps, alpha, gamma, epsilon)
 
@@ -114,10 +117,11 @@ if __name__ == '__main__':
     # show_agent(env, policy)
 
     sum_reward = 0
-    for _ in range(5000):
+    test_number = 50000
+    for _ in range(test_number):
         total_reward = test(env, policy, render=False)
         sum_reward += total_reward
 
-    print(sum_reward / 5000)
+    print(sum_reward / test_number)
 
     env.close()
