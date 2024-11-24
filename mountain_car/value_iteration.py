@@ -133,7 +133,7 @@ def get_next_state(state, action):
 
 if __name__ == '__main__':
 
-    env = gym.make('MountainCar-v0', render_mode='human')
+    env = gym.make('MountainCar-v0', render_mode='rgb_array')
 
     # Create discrete state space
     position_bins = 50
