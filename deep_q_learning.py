@@ -1,17 +1,14 @@
-from collections import deque
 import random
 import time
+from collections import deque
 
-import numpy as np
 import gym
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 
-
-# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-device = torch.device("cpu")
 
 class Policy(nn.Module):
     def __init__(self, s_size=6, h_size=32, a_size=3):
@@ -29,8 +26,10 @@ class Policy(nn.Module):
     def act(self, state, epsilon=0.0):
         if np.random.rand() <= epsilon:
             return np.random.choice(self.a_size)
-        q_values = self(torch.tensor(state, dtype=torch.float32, device=device)).to("cpu")
+        state = state.to(device)  # Ensure state is on the correct device
+        q_values = self(state)
         return torch.argmax(q_values).item()
+
 
 class DQNAgent:
     def __init__(self, state_dim, action_dim, lr, gamma, epsilon, epsilon_decay, buffer_size):
@@ -55,10 +54,11 @@ class DQNAgent:
         for state, action, reward, next_state, done in minibatch:
             target = reward
             if not done:
-                target = reward + self.gamma * torch.max(self.model(torch.tensor(next_state, dtype=torch.float32, device=device))).item()
+                target = reward + self.gamma * torch.max(
+                    self.model(torch.tensor(next_state, dtype=torch.float32, device=device))).item()
 
             with torch.no_grad():
-                target_f = self.model(torch.tensor(state, dtype=torch.float32, device=device)).to("cpu").numpy()
+                target_f = self.model(torch.tensor(state, dtype=torch.float32, device=device)).numpy()
                 target_f[action] = target
                 target_f = torch.tensor(target_f, dtype=torch.float32, device=device)
 
@@ -70,6 +70,7 @@ class DQNAgent:
         if self.epsilon > 0.01:
             self.epsilon *= self.epsilon_decay
 
+
 def test(env, policy, render=True, num_episodes=1):
     if render:
         env.render()
@@ -77,11 +78,13 @@ def test(env, policy, render=True, num_episodes=1):
     total_reward = 0
     with torch.no_grad():
         for _ in range(num_episodes):
-
-            state = env.reset()
+            state, _ = env.reset()
+            state = torch.tensor(state, dtype=torch.float32, device=device)  # Ensure state is on the correct device
             for _ in range(1000):
                 action = policy.act(state)
-                state, reward, done, info = env.step(action)
+                next_state, reward, done, info, _ = env.step(action)
+                next_state = torch.tensor(next_state, dtype=torch.float32,
+                                          device=device)  # Ensure next_state is on the correct device
 
                 if render:
                     env.render()
@@ -90,10 +93,12 @@ def test(env, policy, render=True, num_episodes=1):
                 total_reward += reward
                 if done:
                     break
+                state = next_state  # Update state
 
     print(f'Total Reward: {total_reward / num_episodes}')
 
     return total_reward / num_episodes
+
 
 def train(env):
     state_dim = env.observation_space.shape[0]
@@ -106,11 +111,11 @@ def train(env):
     best_reward = -np.inf
 
     for i_episode in range(200):
-        state = env.reset()
+        state, _ = env.reset()
         score = 0
         for t in range(1000):
             action = agent.model.act(state, epsilon=agent.epsilon)
-            next_state, reward, done, _ = env.step(action)
+            next_state, reward, done, _, _ = env.step(action)
             agent.remember(state, action, reward, next_state, done)
 
             state = next_state
@@ -132,14 +137,16 @@ def train(env):
                 best_reward = reward
                 torch.save(agent.model.state_dict(), 'checkpoint_best.pth')
 
+
 if __name__ == '__main__':
-
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f'Using device: {device}')
     env = gym.make('Acrobot-v1')
-    env.seed(0)
+    # env.seed(0)
 
-    # train(env)
+    train(env)
 
-    policy = Policy(s_size=6, a_size=3)
+    policy = Policy(s_size=6, a_size=3).to(device)
     policy.load_state_dict(torch.load('checkpoint_best.pth'))
 
     test(env, policy, render=False, num_episodes=30)
