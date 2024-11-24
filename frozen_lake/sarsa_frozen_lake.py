@@ -7,29 +7,30 @@ import numpy as np
 
 
 def epsilon_greedy(Q, state, epsilon):
-    if random.uniform(0,1) < epsilon:
+    if random.uniform(0, 1) < epsilon:
         return env.action_space.sample()
     else:
-        return max(list(range(env.action_space.n)), key = lambda x: Q[(state,x)])
+        return max(list(range(env.action_space.n)), key=lambda x: Q[(state, x)])
+
 
 def generate_policy(Q):
-
     policy = defaultdict(int)
 
     for state in range(env.observation_space.n):
-        policy[state] = max(list(range(env.action_space.n)), key = lambda x: Q[(state, x)])
+        policy[state] = max(list(range(env.action_space.n)), key=lambda x: Q[(state, x)])
 
     return policy
+
 
 def sarsa(env, num_episodes, num_timesteps, alpha, gamma, epsilon):
     Q = defaultdict(float)
 
     for i in range(num_episodes):
-        state = env.reset()
+        state, _ = env.reset()
         action = epsilon_greedy(Q, state, epsilon)
 
         for t in range(num_timesteps):
-            next_state, reward, done, _ = env.step(action)
+            next_state, reward, done, _, _ = env.step(action)
             next_action = epsilon_greedy(Q, next_state, epsilon)
 
             Q[(state, action)] += alpha * (reward + gamma * Q[(next_state, next_action)] - Q[(state, action)])
@@ -39,21 +40,20 @@ def sarsa(env, num_episodes, num_timesteps, alpha, gamma, epsilon):
 
             if done:
                 break
-        show_Q(env, Q)
+        # show_Q(env, Q)
 
     return Q
 
-def test(env, optimal_policy, render=True):
 
-    state = env.reset()
+def test(env, optimal_policy, render=True):
+    state, _ = env.reset()
     if render:
         env.render()
-
 
     total_reward = 0
     for _ in range(1000):
         action = int(optimal_policy[state])
-        state, reward, done, info = env.step(action)
+        state, reward, done, info, _ = env.step(action)
 
         if render:
             env.render()
@@ -64,18 +64,19 @@ def test(env, optimal_policy, render=True):
 
     return total_reward
 
+
 def show_agent(env, policy):
-    state = env.reset()
+    state, _ = env.reset()
     env.render()
 
     for t in range(1000):
-
-        state, reward, done, _ = env.step(policy[state])
+        state, reward, done, _, _ = env.step(policy[state])
         env.render()
         if done:
             break
 
     env.close()
+
 
 def generate_random_policy(env):
     policy = defaultdict(int)
@@ -85,17 +86,17 @@ def generate_random_policy(env):
 
     return policy
 
+
 def show_Q(env, Q):
     print("************************************")
     for action in range(env.action_space.n):
         table = np.array([Q[(state, action)] for state in range(env.observation_space.n)])
-        print(table.reshape(4,4))
-
+        print(table.reshape(4, 4))
 
 
 if __name__ == '__main__':
     env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=False)
-    env.seed(42)
+    # env.seed(42)
 
     alpha = 0.1
     gamma = 0.9
@@ -110,7 +111,7 @@ if __name__ == '__main__':
 
     print(policy)
 
-    show_agent(env, policy)
+    # show_agent(env, policy)
 
     sum_reward = 0
     for _ in range(5000):
@@ -120,4 +121,3 @@ if __name__ == '__main__':
     print(sum_reward / 5000)
 
     env.close()
-
