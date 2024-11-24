@@ -42,3 +42,22 @@ def sarsa(env, num_episodes, num_timesteps, alpha, gamma, epsilon):
 defaultdict(<class 'int'>, {0: 0, 1: 3, 2: 0, 3: 3, 4: 0, 5: 0, 6: 0, 7: 0, 8: 3, 9: 1, 10: 0, 11: 0, 12: 0, 13: 2, 14: 1, 15: 0})
 0.78078
 ```
+ 
+# Q-learning
+
+## Setup
+```python
+# Parameters
+alpha = 0.01
+gamma = 0.95
+epsilon = 0.7
+
+num_episodes = 500000
+num_timesteps = 5000
+```
+
+## Results
+```markdown
+defaultdict(<class 'int'>, {0: 0, 1: 3, 2: 0, 3: 3, 4: 0, 5: 0, 6: 2, 7: 0, 8: 3, 9: 1, 10: 0, 11: 0, 12: 0, 13: 2, 14: 1, 15: 0})
+0.77596
+```
