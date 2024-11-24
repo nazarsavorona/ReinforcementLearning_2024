@@ -17,9 +17,10 @@ def epsilon_greedy_policy(state, Q):
     else:
         return max(list(range(env.action_space.n)), key=lambda x: Q[(state, x)])
 
+
 def generate_episode(num_timesteps, Q):
     episode = []
-    state = env.reset()
+    state, _ = env.reset()
 
     for t in range(num_timesteps):
 
@@ -27,7 +28,9 @@ def generate_episode(num_timesteps, Q):
         action = epsilon_greedy_policy(state, Q)
 
         # perform the selected action and store the next state information
-        next_state, reward, done, info = env.step(action)
+        next_state, reward, terminated, truncated, info = env.step(action)
+
+        done = terminated or truncated
 
         # store the state, action, reward in the episode list
         episode.append((state, action, reward))
@@ -52,18 +55,18 @@ def generate_policy(Q):
 
 
 def test_policy(policy, env):
-
     num_episodes = 100
     num_timesteps = 10000
     total_reward = 0
 
     for i in range(num_episodes):
-        state = env.reset()
+        state, _ = env.reset()
         episode_reward = 0
 
         for t in range(num_timesteps):
             action = policy[state]
-            next_state, reward, done, info = env.step(action)
+            next_state, reward, terminated, truncated, info = env.step(action)
+            done = terminated or truncated
             episode_reward += reward
 
             if done:
