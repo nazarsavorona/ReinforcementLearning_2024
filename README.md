@@ -12,7 +12,7 @@
 ### ДЗ
 1. Відворити тренування з практики
 2. Реалізувати методи Policy Iteration та Value Iteration для сценарію Mountain Car
-   3. https://www.gymlibrary.dev/environments/classic_control/mountain_car/
+3. https://www.gymlibrary.dev/environments/classic_control/mountain_car/
 
 * frozer_lake_policy_iteration.py
 * frozer_lake_value_iteration.py
@@ -36,7 +36,7 @@
 ### ДЗ
 
 1. Адаптувати SARSAMethod для сценарію FrozenLake-v1 is_slippery=True
-2. Адалтувати QLearning для сценарію FrozenLake-v1 is_slippery=True
+2. Адаптувати QLearning для сценарію FrozenLake-v1 is_slippery=True
 
 * sarsa_frozen_lake.py
 * q_learning_frozen_lake.py
