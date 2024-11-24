@@ -2,7 +2,7 @@
 
 ## Пара 1 
 ### ДЗ 
-1. Відворити тренування з практики 
+1. Відтворити тренування з практики 
 2. Запустити тренування для https://www.gymlibrary.dev/environments/classic_control/cart_pole/
 
 * gymnasium
@@ -10,12 +10,11 @@
 ## Пара 2
 
 ### ДЗ
-1. Відворити тренування з практики
-2. Реалізувати методи Policy Iteration та Value Iteration для сценарію Mountain Car
-3. https://www.gymlibrary.dev/environments/classic_control/mountain_car/
+1. Відтворити тренування з практики
+2. Реалізувати методи Policy Iteration та Value Iteration для сценарію Mountain Car https://www.gymlibrary.dev/environments/classic_control/mountain_car/
 
-* frozer_lake_policy_iteration.py
-* frozer_lake_value_iteration.py
+* frozen_lake_policy_iteration.py
+* frozen_lake_value_iteration.py
 
 ### Додаткові матеріали
 * Markov Decision Processes: https://gibberblot.github.io/rl-notes/single-agent/MDPs.html
