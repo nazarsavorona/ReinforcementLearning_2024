@@ -156,14 +156,15 @@ def train(env):
 
 
 if __name__ == '__main__':
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = 'cpu'
     print(f'Using device: {device}')
-    env = gym.make('BipedalWalker-v3', render_mode='rgb_array')
+    # env = gym.make('BipedalWalker-v3', render_mode='rgb_array')
     # train(env)
 
     policy = Policy(s_size=24, a_size=4).to(device)
     policy.load_state_dict(torch.load('checkpoint_best.pth'))
 
-    env = gym.make('BipedalWalker-v3', render_mode='human')
+    env = gym.make('BipedalWalker-v3' , render_mode='human')
 
     test(env, policy, render=True, num_episodes=30)
